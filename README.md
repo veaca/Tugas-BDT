@@ -1,9 +1,9 @@
-#Tugas ETS BDT
+# Tugas ETS BDT
 
 1. Desain Infrastruktur
     * Desain Infrastruktur Basis Data Terdistribusi
         - Gambar Infrastruktur<br>
-            
+            ![Infrastruktur DB](InfrastructureDB.png)
         - Jumlah Server<br>
             Total server yang digunakan = 5<br>
             1. Server Database = 3 buah
