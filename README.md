@@ -3,7 +3,7 @@
 1. Desain Infrastruktur
     * Desain Infrastruktur Basis Data Terdistribusi
         - Gambar Infrastruktur<br>
-            ![Infrastruktur DB](InfrastructureDB.png)
+            ![InfrastructureDB](https://user-images.githubusercontent.com/32932112/66381162-f98a9380-e9e2-11e9-96f5-0d8922de9dac.jpg)
         - Jumlah Server<br>
             Total server yang digunakan = 5<br>
             1. Server Database = 3 buah
