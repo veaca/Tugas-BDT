@@ -15,6 +15,6 @@ INSERT INTO mysql_servers(hostgroup_id, hostname, port) VALUES (2, '192.168.16.2
 LOAD MYSQL SERVERS TO RUNTIME;
 SAVE MYSQL SERVERS TO DISK;
 
-INSERT INTO mysql_users(username, password, default_hostgroup) VALUES ('playgrounduser', 'playgroundpassword', 2);
+INSERT INTO mysql_users(username, password, default_hostgroup) VALUES ('hanjayauser', 'hanjayapassword', 2);
 LOAD MYSQL USERS TO RUNTIME;
 SAVE MYSQL USERS TO DISK;

@@ -2,6 +2,6 @@ CREATE USER 'monitor'@'%' IDENTIFIED BY 'monitorpassword';
 GRANT SELECT on sys.* to 'monitor'@'%';
 FLUSH PRIVILEGES;
 
-CREATE USER 'playgrounduser'@'%' IDENTIFIED BY 'playgroundpassword';
-GRANT ALL PRIVILEGES on playground.* to 'playgrounduser'@'%';
+CREATE USER 'hanjayauser'@'%' IDENTIFIED BY 'hanjayapassword';
+GRANT ALL PRIVILEGES on hanjaya.* to 'hanjayauser'@'%';
 FLUSH PRIVILEGES;
