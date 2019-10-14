@@ -616,18 +616,22 @@
 			```bash
 			vagrant up
 			```
+			![Vagrant Up](/images/vagrant-up.png)
 		2. Tunggu hingga seluruh download dan provision selesai. Setelah selesai cek status dengan :
 			```bash
 			vagrant status
 			```
+			![Vagrant Status](/images/vagrant-status.png)
 		3. Masuk ke ssh proxy, dengan mengetikkan:
 			```
 			vagrant ssh proxy
 			```
+			![Vagrant Proxy](/images/vagrant-ssh-proxy.png)
 		4. Masukkan proxysql.sql sebagai provision pada proxy :
 			```
 			mysql -u admin -p -h 127.0.0.1 -P 6032 < /vagrant/sql/proxysql.sql
 			```
+			![Vagrant Mysql proxy](/images/mysql-proxysql.png)
 3. Implementasi Pada Aplikasi (Web)
 	- Instal Hanjaya
 		- Copy file Hanjaya dari git dengan 
@@ -636,6 +640,7 @@
 				cd hanjaya
 				composer install
 			```
+			![composer install](/images/composer-install.png)
 		- Buat file .env untuk konfigurasi koneksi database dengan kode :
 			```ini
 				DB_CONNECTION=mysql
@@ -655,16 +660,19 @@
 				php artisan storage:link
 				php artisan db:seed
 			```
+			![Migrate](/images/php-artisan-migrate.png)
 		- Jalankan Aplikasi
 			```bash
 				php artisan serve
 			```
+			![php command](/images/php-command.png)
 4. Simulasi Fail-Over
 	- Matikan salah satu MySQL Server
 		Dapat memilih server untuk dimatikan, sebagai contoh db2`
 		```bash
 			vagrant ssh db2`
 		```
+		![ssh db2](/images/ssh-db2.png)
 		Matikan MySQL
 		```bash
 			sudo systemctl stop mysql
@@ -673,6 +681,7 @@
 		```bash
 			sudo systemctl status mysql
 		```
+		![ssh db2](/images/ssh-db2.png)
 	- Cek status server pada ProxySQL
 		ssh pada proxy
 		```bash
@@ -683,8 +692,10 @@
 		```sql
 			SELECT hostgroup_id, hostname, status FROM runtime_mysql_servers;
 		```
+		![db2 shunned](/images/db2-shunned.png)
 	- Lakukan penambahan data baru pada database melalui aplikasi
-	
+		![add](/images/add-customer.png)
+		![added](/images/added-customer.png)
 	- Cek apakah data tersebut sudah direplikasi pada saat db2 dinyalakan
 		- Menyalakan kembali db2
 		```bash
@@ -698,6 +709,7 @@
 		```bash
 			sudo systemctl status mysql
 		```
+		![start](/images/start-mysql-db2.png)
 		- Cek status server pada ProxySQL
 		ssh pada proxy
 		```bash
@@ -714,6 +726,7 @@
 			use hanjaya;
 			select * from customers;
 		```
+		![test-data](/images/test-data.png)
 		
 		
 		
