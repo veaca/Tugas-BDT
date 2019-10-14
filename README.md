@@ -80,8 +80,8 @@
 		  end
 
 		end
-		```
-		Penjelasan dari kode diatas : \
+	```
+		Penjelasan dari kode diatas : 
 		`Vagrantfile` akan membuat 1 Load Balancer dengan IP 192.168.16.21 dan 3 MySQL Server dengan IP 192.168.16.22, 192.168.16.23, 192.168.16.24 dengan memori `512MB`
 		
 	- Dilanjutkan dengan membuat Provision Script
