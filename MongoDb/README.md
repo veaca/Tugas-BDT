@@ -62,7 +62,7 @@ Alvin Tanuwijaya
      - `mongo-shard-3` :
        - OS: `ubuntu-18.04`
        - RAM: `512` MB
-       - IP: `192.168.16.`
+       - IP: `192.168.16.26`
 2. Implementasi Vagrant
    1. Membuat `Vagrantfile` \
       Vagrantfile dapat dibuat dengan mengetikkan
