@@ -630,7 +630,7 @@ Alvin Tanuwijaya
     3. Membuat database \
         Ketikkan
         ```bash
-        use news
+        use ufo
         sh.enableSharding("ufo")
         db.ufoCollection.ensureIndex( { _id : "hashed" } )
         sh.shardCollection( "ufo.ufoCollection", { "_id" : "hashed" } )
