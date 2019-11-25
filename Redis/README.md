@@ -1,6 +1,5 @@
 ### Tugas Implementasi Redis Cluster pada Wordpress
 # Implementasi Redis Cluster
-
 - [Implementasi Redis Cluster](#implementasi-redis-cluster)
   - [Deskripsi Tugas](#deskripsi-tugas)
   - [Implementasi Redis Cluster](#implementasi-redis-cluster-1)
@@ -17,6 +16,9 @@
 
 ## Deskripsi Tugas
 ## Implementasi Redis Cluster
+Skema Arsitektur
+![arsitektur](https://user-images.githubusercontent.com/32932112/69537058-dc6d4c80-0fb1-11ea-9d6b-f58a8f5e6dc6.png)
+Berdasarkan skema diatas:
 1. Terdapat beberapa server yang digunakan pada Tugas ini, dengan pembagian IP dan spesifikasinya sebagai berikut:
    - Server Wordpress dan MySQL:
      - `wordpress1` :
@@ -385,6 +387,8 @@ Langkah selanjutnya adalah pengujian JMeter
 ### Pengujian 221 Koneksi
 ![test221](https://user-images.githubusercontent.com/32932112/69533517-86e17180-0faa-11ea-95ef-661218f608da.png)
 
+Kesimpulan
+Dari ke-3 percobaan yang telah dilakukan, dapat dilihat bahwa Wordpress yang tidak menggunakan redis object cache lebih cepat daripada yang menggunakan. Hal ini dapat diasumsikan terjadi karena request yang diterima oleh Wordpress21 (menggunakan object cache) membutuhkan waktu lebih untuk mendistribusikan ke seluruh redis server, dimana wordpress 22 dapat langsung memberikan jawaban kembali.
 
 ## Proses Fail Over
 ### Simulasi Redis Master Down
