@@ -27,8 +27,9 @@ sudo chown redis:redis /var/lib/redis
 sudo chmod 770 /var/lib/redis
 
 sudo systemctl start redis
-sudo systemctl status redis
 
 sudo chmod 777 /etc/redis-sentinel.conf
 sudo systemctl start redisentinel
-sudo systemctl status redisentinel
+
+sudo chmod 777 /etc/redis -R
+sudo systemctl restart redis

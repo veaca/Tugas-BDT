@@ -1,6 +1,5 @@
 ### Tugas Implementasi Redis Cluster pada Wordpress
 # Implementasi Redis Cluster
-Ferdinand Jason Gondowijoyo 
 
 - [Implementasi Redis Cluster](#implementasi-redis-cluster)
   - [Deskripsi Tugas](#deskripsi-tugas)
@@ -10,8 +9,8 @@ Ferdinand Jason Gondowijoyo
     - [Menginstall Redis Object Cache pada server wordpress1](#menginstall-redis-object-cache-pada-server-wordpress1)
   - [Pengujian menggunakan JMeter](#pengujian-menggunakan-jmeter)
     - [Pengujian 50 Koneksi](#pengujian-50-koneksi)
-    - [Pengujian 133 Koneksi](#pengujian-133-koneksi)
-    - [Pengujian 233 Koneksi](#pengujian-233-koneksi)
+    - [Pengujian 133 Koneksi](#pengujian-121-koneksi)
+    - [Pengujian 233 Koneksi](#pengujian-221-koneksi)
   - [Proses Fail Over](#proses-fail-over)
     - [Simulasi Redis Master Down](#simulasi-redis-master-down)
     - [Proses Fail Over](#proses-fail-over-1)
@@ -23,24 +22,24 @@ Ferdinand Jason Gondowijoyo
      - `wordpress1` :
        - OS: `ubuntu-18.04`
        - RAM: `512` MB
-       - IP: `192.168.16.33`
+       - IP: `192.168.16.21`
      - `wordpress2` :
        - OS: `ubuntu-18.04`
        - RAM: `512` MB
-       - IP: `192.168.16.34`
+       - IP: `192.168.16.22`
    - Server Redis:
      - `redis1` :
        - OS: `ubuntu-18.04`
        - RAM: `512` MB
-       - IP: `192.168.16.35`
+       - IP: `192.168.16.23`
      - `redis2` :
        - OS: `ubuntu-18.04`
        - RAM: `512` MB
-       - IP: `192.168.16.36`
+       - IP: `192.168.16.24`
      - `redis3` :
        - OS: `ubuntu-18.04`
        - RAM: `512` MB
-       - IP: `192.168.16.37`
+       - IP: `192.168.16.25`
 2. Implementasi Vagrant
    1. Membuat `Vagrantfile` \
       Vagrantfile dapat dibuat dengan mengetikkan
@@ -63,7 +62,7 @@ Ferdinand Jason Gondowijoyo
                 config.vm.define "wordpress#{i}" do |node|
                     node.vm.hostname = "wordpress#{i}"
                     node.vm.box = "bento/ubuntu-18.04"
-                    node.vm.network "private_network", ip: "192.168.16.#{32+i}"
+                    node.vm.network "private_network", ip: "192.168.16.#{20+i}"
 
                     node.vm.provider "virtualbox" do |vb|
                         vb.name = "wordpress#{i}"
@@ -78,7 +77,7 @@ Ferdinand Jason Gondowijoyo
                 config.vm.define "redis#{i}" do |node|
                 node.vm.hostname = "redis#{i}"
                 node.vm.box = "bento/ubuntu-18.04"
-                node.vm.network "private_network", ip: "192.168.16.#{34+i}"
+                node.vm.network "private_network", ip: "192.168.16.#{22+i}"
 
                 node.vm.provider "virtualbox" do |vb|
                     vb.name = "redis#{i}"
@@ -163,15 +162,12 @@ Ferdinand Jason Gondowijoyo
         sudo chmod 770 /var/lib/redis
 
         sudo systemctl start redis
-        sudo systemctl status redis
 
         sudo chmod 777 /etc/redis-sentinel.conf
         sudo systemctl start redisentinel
-        sudo systemctl status redisentinel
 
-        sudo chmod -R 777 /etc/redis
+        sudo chmod 777 /etc/redis -R
         sudo systemctl restart redis
-        sudo systemctl status redis
         ```
     3. Script Provision untuk `redis2.sh` : 
         ```bash
@@ -204,15 +200,12 @@ Ferdinand Jason Gondowijoyo
         sudo chmod 770 /var/lib/redis
 
         sudo systemctl start redis
-        sudo systemctl status redis
 
         sudo chmod 777 /etc/redis-sentinel.conf
         sudo systemctl start redisentinel
-        sudo systemctl status redisentinel
 
-        sudo chmod -R 777 /etc/redis
+        sudo chmod 777 /etc/redis -R
         sudo systemctl restart redis
-        sudo systemctl status redis
         ```
     4. Script Provision untuk `redis3.sh` : 
         ```bash
@@ -245,67 +238,64 @@ Ferdinand Jason Gondowijoyo
         sudo chmod 770 /var/lib/redis
 
         sudo systemctl start redis
-        sudo systemctl status redis
 
         sudo chmod 777 /etc/redis-sentinel.conf
         sudo systemctl start redisentinel
-        sudo systemctl status redisentinel
 
-        sudo chmod -R 777 /etc/redis
+        sudo chmod 777 /etc/redis -R
         sudo systemctl restart redis
-        sudo systemctl status redis
         ```
 4. Membuat File Konfigurasi
-    1. File Konfigurasi `redis1` : `redis1.conf` dan `sentinel1.conf`
-        `redis.conf`\
+    1. File Konfigurasi `redis1` :
+        `redis1.conf`
         ```bash
-        bind 192.168.16.35
+        bind 192.168.16.23
         port 6379
         dir "/etc/redis"
         ```
 
-        `sentinel.conf`\
+        `sentinel1.conf`
         ```bash
-        bind 192.168.16.35
+        bind 192.168.16.23
         port 26379
 
-        sentinel monitor redis-cluster 192.168.16.35 6379 2
+        sentinel monitor redis-cluster 192.168.16.23 6379 2
         sentinel down-after-milliseconds redis-cluster 5000
         sentinel parallel-syncs redis-cluster 1
         sentinel failover-timeout redis-cluster 10000
         ```
-    2. File Konfigurasi `redis2` : `redis2.conf` dan `sentinel2.conf`
-        `redis.conf`\
+    2. File Konfigurasi `redis2` : 
+        `redis2.conf`
         ```bash
-        bind 192.168.16.36
+        bind 192.168.16.24
         port 6379
         dir "/etc/redis"
         ```
 
-        `sentinel.conf`\
+        `sentinel2.conf`
         ```bash
-        bind 192.168.16.36
+        bind 192.168.16.24
         port 26379
 
-        sentinel monitor redis-cluster 192.168.16.35 6379 2
+        sentinel monitor redis-cluster 192.168.16.23 6379 2
         sentinel down-after-milliseconds redis-cluster 5000
         sentinel parallel-syncs redis-cluster 1
         sentinel failover-timeout redis-cluster 10000
         ```
-    3. File Konfigurasi `redis3` : `redis3.conf` dan `sentinel3.conf`
-        `redis.conf`\
+    3. File Konfigurasi `redis3` :
+        `redis3.conf`
         ```bash
-        bind 192.168.16.37
+        bind 192.168.16.25
         port 6379
         dir "/etc/redis"
         ```
 
-        `sentinel.conf`\
+        `sentinel3.conf`
         ```bash
-        bind 192.168.16.37
+        bind 192.168.16.25
         port 26379
 
-        sentinel monitor redis-cluster 192.168.16.35 6379 2
+        sentinel monitor redis-cluster 192.168.16.23 6379 2
         sentinel down-after-milliseconds redis-cluster 5000
         sentinel parallel-syncs redis-cluster 1
         sentinel failover-timeout redis-cluster 10000
@@ -345,59 +335,71 @@ Ferdinand Jason Gondowijoyo
         ```
 
 ## Menjalankan Redis Cluster
-Menjalankan Redis Cluster dapat dilakukan dengan mengetikkan perintah 
+Menjalankan Redis Cluster dilakukan dengan mengetikkan perintah 
 ```
 vagrant up
 ```
-Kemudian apabila di test akan menghasilkan sebagai berikut.
-![Redis Cluster](img/Redis%20Cluster.PNG)
+Kemudian setelah selesai, masuk ke redis1 dan ketikkan
+    ```bash
+    redis-cli -h 192.168.16.23
+    ```
+Setelah itu ketikkan
+    ```bash
+    info replication
+    ```
+
+![replication](https://user-images.githubusercontent.com/32932112/69533261-10dd0a80-0faa-11ea-96bb-5b1f746b6247.png)
+
 
 ## Menginstall Wordpress pada server wordpress
-Tahap instalasi wordpress bisa dilakukan dengan membuka browser dengan url : `<alamat_ip_wordpress>/index.php` kemudian ikuti langkah - langkah yang tertera.
+Tahap instalasi wordpress bisa dilakukan dengan membuka browser dengan url : `192.168.16.21/index.php` kemudian ikuti langkah - langkah yang tertera.
 
-![Wordpress](img/Wordpress%20Dashboard.PNG)
+![21-up](https://user-images.githubusercontent.com/32932112/69533293-205c5380-0faa-11ea-90e1-8d28536fa721.png)
+![22-up](https://user-images.githubusercontent.com/32932112/69533296-218d8080-0faa-11ea-8792-44775e1f0876.png)
+
 
 ### Menginstall Redis Object Cache pada server wordpress1
-1. Login pada `/wp-admin`, kemudian pada bagian `Plugins` cari `Redis Cache Object` kemudian install.
-   ![Redis Installed](img/Redis%20Cache%20Object%20Wordpress%20Installed.PNG)
+1. Masuk di `/wp-admin`, kemudian pada bagian `Plugins` cari `Redis Object Cache` kemudian install.
+  
 2. Tambahkans Konfigurasi pada `/var/www/html/wp-config.php` pada server `wordpress1`, kemudian tambahkan line berikut
    ```
-   define('WP_REDIS_HOST', '192.168.16.35');
+   define('FS_METHOD', 'direct');
+   define('WP_REDIS_SENTINEL', 'redis-cluster');
+   define('WP_REDIS_SERVERS', ['tcp://192.168.16.23:26379', 'tcp://192.168.16.24:26379', 'tcp://192.168.16.25:26379']);
    ```
 3. Aktifkan Redis Cache Plugin\
    Kemudian lihat pada bagian `Diagnostics` agar seperti pada Gambar berikut.
-   ![Redis Diagnostic](img/Redis%20Cluster%20Installed%20in%20Wordpress.PNG)
+ 
 4. Redis Cache Object sudah terinstall
+    ![redis-connect](https://user-images.githubusercontent.com/32932112/69533360-41bd3f80-0faa-11ea-9874-478748d9bf95.png)
 
 ## Pengujian menggunakan JMeter
-Langkah selanjutnya adalah pengujian JMeter, sebelum menginstall JMeter pastikan komputer sudah terinstall `JDK` dan `JRE`, serta sudah mendownload JMeter
+Langkah selanjutnya adalah pengujian JMeter
 
 ### Pengujian 50 Koneksi
-![J50](img/JMeter%2050.PNG)
+![tes50](https://user-images.githubusercontent.com/32932112/69533504-83e68100-0faa-11ea-965c-8e56f04fa164.png)
 
-### Pengujian 133 Koneksi
-![J133](img/JMeter%20133.PNG)
+### Pengujian 121 Koneksi
+![tes121](https://user-images.githubusercontent.com/32932112/69533513-85b04480-0faa-11ea-9486-fc1efa37a0c0.png)
 
-### Pengujian 233 Koneksi
-![J233](img/JMeter%20233.PNG)
+### Pengujian 221 Koneksi
+![test221](https://user-images.githubusercontent.com/32932112/69533517-86e17180-0faa-11ea-95ef-661218f608da.png)
 
 
 ## Proses Fail Over
 ### Simulasi Redis Master Down
-1. Simulasi Redis Master Down bisa dilakukan dengan 2 cara yaitu dengan mengetikkan pada server `redis1`:
+1. Simulasi Redis Master Down bisa dilakukan dengan mengetikkan pada server `redis1`:
     ```
     sudo systemctl stop redis
     sudo systemctl stop redisentinel
     ```
-    atau
-    ```
-    redis-cli -h 192.168.16.35 -p 5379 DEBUG sleep 60
-    ```
 
-    ![Master Down](img/Master%20Down%20Simulation.PNG)
+    ![stop-redis1](https://user-images.githubusercontent.com/32932112/69533582-a2e51300-0faa-11ea-9a57-3f259006f541.png)
+    ![stop-redisentinel1](https://user-images.githubusercontent.com/32932112/69533586-a4164000-0faa-11ea-8e40-fd573f93bcf9.png)
+
 2. Master telah down
 ### Proses Fail Over
 1. Masuk kedalam `redis2` dan `redis3`, kemudian cek siapa master baru yang terpilih dengan mengetikkan `info replication` pada `redis-cli`.
-   ![Redis Cluster Master Down](img/Redis%20Cluster%20Master%20Down.PNG)
+   ![redis3-master](https://user-images.githubusercontent.com/32932112/69533641-b8f2d380-0faa-11ea-81de-88cddf806a72.png)
 
-2. Dapat dilihat bahwa master yang terpilih adalah `redis3`.
+2. Master yang baru adalah `redis3`.
