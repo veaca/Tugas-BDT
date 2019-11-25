@@ -62,7 +62,7 @@ Alvin Tanuwijaya
      - `mongo-shard-3` :
        - OS: `ubuntu-18.04`
        - RAM: `512` MB
-       - IP: `192.168.16.`
+       - IP: `192.168.16.26`
 2. Implementasi Vagrant
    1. Membuat `Vagrantfile` \
       Vagrantfile dapat dibuat dengan mengetikkan
@@ -630,7 +630,7 @@ Alvin Tanuwijaya
     3. Membuat database \
         Ketikkan
         ```bash
-        use news
+        use ufo
         sh.enableSharding("ufo")
         db.ufoCollection.ensureIndex( { _id : "hashed" } )
         sh.shardCollection( "ufo.ufoCollection", { "_id" : "hashed" } )
