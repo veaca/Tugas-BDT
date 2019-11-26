@@ -46,14 +46,14 @@
   *
   * @since 2.6.0
   */
- define('AUTH_KEY',         'be de te tugas redis');
- define('SECURE_AUTH_KEY',  'be de te tugas redis');
- define('LOGGED_IN_KEY',    'be de te tugas redis');
- define('NONCE_KEY',        'be de te tugas redis');
- define('AUTH_SALT',        'be de te tugas redis');
- define('SECURE_AUTH_SALT', 'be de te tugas redis');
- define('LOGGED_IN_SALT',   'be de te tugas redis');
- define('NONCE_SALT',       'be de te tugas redis');
+ define('AUTH_KEY',         'bdt');
+ define('SECURE_AUTH_KEY',  'bdt');
+ define('LOGGED_IN_KEY',    'bdt');
+ define('NONCE_KEY',        'bdt');
+ define('AUTH_SALT',        'bdt');
+ define('SECURE_AUTH_SALT', 'bdt');
+ define('LOGGED_IN_SALT',   'bdt');
+ define('NONCE_SALT',       'bdt');
 
  /**#@-*/
 
