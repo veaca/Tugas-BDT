@@ -1,0 +1,50 @@
+Run on PD Server
+./bin/pd-server --name=pd1 \
+                --data-dir=pd \
+                --client-urls="http://192.168.16.21:2379" \
+                --peer-urls="http://192.168.16.21:2380" \
+                --initial-cluster="pd1=http://192.168.16.21:2380,pd2=http://192.168.16.22:2380,pd3=http://192.168.16.23:2380" \
+                --log-file=pd.log &
+
+Run on PD Server
+./bin/pd-server --name=pd2 \
+                --data-dir=pd \
+                --client-urls="http://192.168.16.22:2379" \
+                --peer-urls="http://192.168.16.22:2380" \
+                --initial-cluster="pd1=http://192.168.16.21:2380,pd2=http://192.168.16.22:2380,pd3=http://192.168.16.23:2380" \
+                --log-file=pd.log &
+
+Run on PD Server
+./bin/pd-server --name=pd3 \
+                --data-dir=pd \
+                --client-urls="http://192.168.16.23:2379" \
+                --peer-urls="http://192.168.16.23:2380" \
+                --initial-cluster="pd1=http://192.168.16.21:2380,pd2=http://192.168.16.22:2380,pd3=http://192.168.16.23:2380" \
+                --log-file=pd.log &
+                
+
+======================================================
+
+Run on Tikv Server
+./bin/tikv-server --pd="192.168.16.21:2379,192.168.16.22:2379.192.168.16.23:2379" \
+                  --addr="192.168.16.24:20160" \
+                  --data-dir=tikv \
+                  --log-file=tikv.log &
+
+
+./bin/tikv-server --pd="192.168.16.21:2379,192.168.16.22:2379.192.168.16.23:2379" \
+                  --addr="192.168.16.25:20160" \
+                  --data-dir=tikv \
+                  --log-file=tikv.log &
+
+./bin/tikv-server --pd="192.168.16.21:2379,192.168.16.22:2379.192.168.16.23:2379" \
+                  --addr="192.168.16.26:20160" \
+                  --data-dir=tikv \
+                  --log-file=tikv.log &
+
+======================================================
+
+Run on TiDB Server
+./bin/tidb-server --store=tikv \
+                  --path="192.168.16.21:2379" \
+                  --log-file=tidb.log &
