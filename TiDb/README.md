@@ -4,6 +4,9 @@
 
 ## Arsitektur TiDb
 1. Gambar Arsitektur
+
+![arsitektur](img/arsitektur.jpg)
+
 2. Penjelasan
 Pada arsitektur yang digunakan, terdapat 6 server, yaitu:
 
