@@ -1,0 +1,10 @@
+cd ~
+cd prometheus-2.2.1.linux-amd64
+./prometheus \
+    --config.file="./prometheus.yml" \
+    --web.listen-address=":9090" \
+    --web.external-url="http://192.168.16.21:9090/" \
+    --web.enable-admin-api \
+    --log.level="info" \
+    --storage.tsdb.path="./data.metrics" \
+    --storage.tsdb.retention="15d" &

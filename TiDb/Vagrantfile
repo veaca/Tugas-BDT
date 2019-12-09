@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
         # Disable checking VirtualBox Guest Addition agar tidak compile ulang setiap restart
         node.vbguest.auto_update = false
         
-        node.vm.network "private_network", ip: "192.168.199.#{20+i}"
+        node.vm.network "private_network", ip: "192.168.16.#{20+i}"
         
         node.vm.provider "virtualbox" do |vb|
           vb.name = "pd#{i}"
@@ -36,7 +36,7 @@ Vagrant.configure("2") do |config|
         # Disable checking VirtualBox Guest Addition agar tidak compile ulang setiap restart
         node.vbguest.auto_update = false
         
-        node.vm.network "private_network", ip: "192.168.199.#{23+i}"
+        node.vm.network "private_network", ip: "192.168.16.#{23+i}"
         
         node.vm.provider "virtualbox" do |vb|
           vb.name = "tikv#{i}"

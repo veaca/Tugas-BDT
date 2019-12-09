@@ -2,7 +2,7 @@ from flask import Flask
 import mysql.connector
 import json
 from flask import jsonify, request
-
+from datetime import datetime as dt
 
 app = Flask(__name__)
 app.secret_key = "tidb"
@@ -22,12 +22,13 @@ db = mysql.connector.connect(
 
 @app.route('/ufo', methods = ['GET'])
 def get_ufo():
-    cursor = db.cursor
-    cursor.execute("select * from data")
+    csr = db.cursor()
+    csr.execute("select * from ufo_data")
     data=[]
-    for (datetime, city, state, country, shape, duration_in_seconds,duration_in_hours_per_minute,comments, date_posted, latitude, longitude) in cursor:
+    for (id, datetime, city, state, country, shape, duration_in_seconds,duration_in_hours_per_minute,comments, date_posted, latitude, longitude) in csr:
         save = {}
-        save["datetime"] = datetime;
+        save["id"] = id;
+        save["datetime"] = datetime.strftime("%d-%b-%Y (%H:%M:%S.%f)");
         save["city"]=city;
         save["state"]=state;
         save["country"]=country;
@@ -35,13 +36,12 @@ def get_ufo():
         save["duration_in_seconds"]=duration_in_seconds;
         save["duration_in_hours_per_minute"]=duration_in_hours_per_minute;
         save["comments"]=comments;
-        save["date_posted"]=date_posted;
+        save["date_posted"]=date_posted.strftime("%d-%b-%Y");
         save["latitude"]=latitude;
         save["longitude"]=longitude;
         data.append(save)
 
-    db.commit()
-    cursor.close()
+    csr.close()
     response = json.dumps(data)
     return response
 
@@ -60,58 +60,38 @@ def add_ufo():
     ufo_latitude = request_json["latitude"]
     ufo_longitude = request_json["longitude"]
 
-    cursor = db.cursor()
-    cursor.execue("insert into data values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %S)", (ufo_datetime,ufo_city,ufo_state,ufo_country,ufo_shape,ufo_duration_in_seconds,ufo_duration_in_hours_per_minute,ufo_comments,ufo_date_posted,ufo_latitude,ufo_longitude))
+    csr = db.cursor()
+    csr.execute("insert into ufo_data (`datetime`,`city`,`state`,`country`,`shape`,`duration_in_seconds`,`duration_in_hours_per_minute`,`comments`,`date_posted`,`latitude`,`longitude`) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);", (ufo_datetime,ufo_city,ufo_state,ufo_country,ufo_shape,ufo_duration_in_seconds,ufo_duration_in_hours_per_minute,ufo_comments,ufo_date_posted,ufo_latitude,ufo_longitude))
     db.commit()
-    cursor.close()
+    csr.close()
     response = jsonify('Ufo Added!')
     response.status_code = 200
     return response
 
-@app.route('/ufo/<id>', methods=['PUT'])
-def update_ufo(id):
+@app.route('/ufo/<ufo_id>', methods=['PUT'])
+def update_ufo(ufo_id):
     request_json = request.json
-    ufo_datetime = request_json["datetime"]
     ufo_city = request_json["city"]
     ufo_state = request_json["state"]
     ufo_country = request_json["country"]
     ufo_shape = request_json["shape"]
-    ufo_duration_in_seconds = request_json["duration_in_seconds"]
-    ufo_duration_in_hours_per_minute = request_json["duration_in_hours_per_minute"]
-    ufo_comments = request_json["comments"]
-    ufo_date_posted = request_json["date_posted"]
-    ufo_latitude = request_json["latitude"]
-    ufo_longitude = request_json["longitude"]
 
-    cursor = db.cursor()
-    cursor.execue("update data set city = %s and state = %s and country = %s where datetime = %s and shape = %s and duration_in_second = %s and duration_in_hours_per_minute = %s and comments = %s and date_posted = %s and latitude = %s and longitude = %s", (ufo_city,ufo_state,ufo_country,ufo_datetime,ufo_shape,ufo_duration_in_seconds,ufo_duration_in_hours_per_minute,ufo_comments,ufo_date_posted,ufo_latitude,ufo_longitude))
+    csr = db.cursor()
+    csr.execute("update ufo_data set city = %s, state = %s, country = %s, shape = %s where id=%s", (ufo_city,ufo_state,ufo_country,ufo_shape,ufo_id))
     db.commit()
-    cursor.close()
+    csr.close()
 
-    response = jsonify('Ufo Updated with id ={}'.format(ufo_id))
+    response = jsonify('Ufo Updated')
     response.status_code = 200
     return response
 
 @app.route('/ufo/<id>', methods=['DELETE'])
 def delete_ufo(id):
-    request_json = request.json
-    ufo_id = request_json["_id"]
-    ufo_datetime = request_json["datetime"]
-    ufo_city = request_json["city"]
-    ufo_state = request_json["state"]
-    ufo_country = request_json["country"]
-    ufo_shape = request_json["shape"]
-    ufo_duration_in_seconds = request_json["duration_in_seconds"]
-    ufo_duration_in_hours_per_minute = request_json["duration_in_hours_per_minute"]
-    ufo_comments = request_json["comments"]
-    ufo_date_posted = request_json["date_posted"]
-    ufo_latitude = request_json["latitude"]
-    ufo_longitude = request_json["longitude"]
 
-    cursor = db.cursor()
-    cursor.execue("delete from data where datetime = %s and city = %s and state = %s and country = %s and shape = %s and duration_in_second = %s and duration_in_hours_per_minute = %s and comments = %s and date_posted = %s and latitude = %s and longitude = %s", (ufo_datetime,ufo_city,ufo_state,ufo_country,ufo_shape,ufo_duration_in_seconds,ufo_duration_in_hours_per_minute,ufo_comments,ufo_date_posted,ufo_latitude,ufo_longitude))
+    csr = db.cursor()
+    csr.execute("delete from ufo_data where id="+str(id))
     db.commit()
-    cursor.close()
+    csr.close()
     response = jsonify('Ufo Deleted')
     response.status_code = 200
     return response
